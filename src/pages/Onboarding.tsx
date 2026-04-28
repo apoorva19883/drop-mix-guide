@@ -6,17 +6,17 @@ import { colours } from "@/data/colours";
 import { setOnboarded, setPrefs, isOnboarded } from "@/lib/storage";
 import { ArrowRight, Check } from "lucide-react";
 
-const paintTypes = [
+const paintTypes: { id: "Acrylic" | "Oil" | "Watercolour" | "Gouache"; emoji: string; desc: string; popular?: boolean }[] = [
   { id: "Acrylic", emoji: "🎨", desc: "Versatile · fast drying", popular: true },
   { id: "Oil", emoji: "🖌️", desc: "Rich · slow blending" },
   { id: "Watercolour", emoji: "💧", desc: "Translucent · delicate" },
   { id: "Gouache", emoji: "✏️", desc: "Opaque matte finish" },
-] as const;
+];
 
 const Onboarding = () => {
   const nav = useNavigate();
   const [step, setStep] = useState(0);
-  const [paint, setPaint] = useState<typeof paintTypes[number]["id"]>("Acrylic");
+  const [paint, setPaint] = useState<"Acrylic" | "Oil" | "Watercolour" | "Gouache">("Acrylic");
   const demo = colours[0];
 
   useEffect(() => { if (isOnboarded()) nav("/home"); }, [nav]);
