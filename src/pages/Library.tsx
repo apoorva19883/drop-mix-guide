@@ -60,9 +60,25 @@ const Library = () => {
           <Search size={16} className="absolute left-4 top-1/2 -translate-y-1/2 text-muted-foreground" />
           <input
             value={q} onChange={e => setQ(e.target.value)}
-            placeholder="Search your mixes..."
+            placeholder="Search by name, hex, mood…"
             className="w-full pl-11 pr-4 py-3 rounded-2xl bg-card border border-border text-sm focus:outline-none focus:ring-2 focus:ring-primary/30"
           />
+        </div>
+
+        <div className="flex gap-2 overflow-x-auto scrollbar-hide pb-2 mb-2">
+          {temps.map(t => {
+            const dot = t === "Warm" ? "#E8572A" : t === "Cool" ? "#5B7FBF" : t === "Neutral" ? "#9E9485" : null;
+            return (
+              <button
+                key={t}
+                onClick={() => setTemp(t)}
+                className={`pill shrink-0 transition-colors ${temp === t ? "bg-primary text-primary-foreground" : "bg-card border border-border"}`}
+              >
+                {dot && <span className="h-2.5 w-2.5 rounded-full" style={{ background: dot }} />}
+                {t}
+              </button>
+            );
+          })}
         </div>
 
         <div className="flex gap-2 overflow-x-auto scrollbar-hide pb-2 mb-2">
@@ -75,11 +91,11 @@ const Library = () => {
           ))}
         </div>
 
-        <div className="flex items-center justify-between mb-4 text-xs">
-          <span className="text-muted-foreground">{filtered.length} {filtered.length === 1 ? "mix" : "mixes"}</span>
-          <div className="flex gap-1">
+        <div className="flex items-center justify-between mb-4 text-xs gap-2">
+          <span className="text-muted-foreground shrink-0">{filtered.length} {filtered.length === 1 ? "mix" : "mixes"}</span>
+          <div className="flex gap-1 overflow-x-auto scrollbar-hide">
             {sorts.map(s => (
-              <button key={s} onClick={() => setSort(s)} className={`px-2.5 py-1 rounded-full ${sort === s ? "bg-surface font-semibold" : "text-muted-foreground"}`}>{s}</button>
+              <button key={s} onClick={() => setSort(s)} className={`px-2.5 py-1 rounded-full whitespace-nowrap ${sort === s ? "bg-surface font-semibold" : "text-muted-foreground"}`}>{s}</button>
             ))}
           </div>
         </div>
@@ -103,9 +119,15 @@ const Library = () => {
                     <div className="font-semibold text-sm truncate">{m.name}</div>
                     <div className="flex items-center justify-between mt-1">
                       <span className="pill bg-surface text-[10px]">{m.paintType}</span>
-                      <span className="text-[10px] text-muted-foreground">{m.recipe.total} drops</span>
+                      <span className="pill bg-surface text-[10px]">
+                        <span className="h-2 w-2 rounded-full" style={{ background: m._temp === "Warm" ? "#E8572A" : m._temp === "Cool" ? "#5B7FBF" : "#9E9485" }} />
+                        {m._temp}
+                      </span>
                     </div>
-                    <div className="text-[10px] text-muted-foreground mt-1">{new Date(m.savedAt).toLocaleDateString()}</div>
+                    <div className="flex items-center justify-between mt-1 text-[10px] text-muted-foreground">
+                      <span>{m.recipe.total} drops</span>
+                      <span>{new Date(m.savedAt).toLocaleDateString()}</span>
+                    </div>
                   </div>
                 </button>
                 <button
