@@ -5,29 +5,38 @@ import { useEffect, useMemo, useState } from "react";
 import { deleteMix, getMixes, SavedMix } from "@/lib/storage";
 import { Logo } from "@/components/Logo";
 import { toast } from "sonner";
+import { classifyTemperature, fuzzyFilter, temperatureRank, type Temperature } from "@/lib/search";
 
 const types = ["All", "Acrylic", "Oil", "Watercolour", "Gouache"] as const;
-const sorts = ["Recent", "Name", "Colour"] as const;
+const temps = ["All", "Warm", "Cool", "Neutral"] as const;
+const sorts = ["Recent", "Name", "Warm → Cool", "Cool → Warm"] as const;
 
 const Library = () => {
   const nav = useNavigate();
   const [params] = useSearchParams();
   const [mixes, setMixes] = useState<SavedMix[]>([]);
   const [type, setType] = useState<typeof types[number]>("All");
+  const [temp, setTemp] = useState<typeof temps[number]>("All");
   const [sort, setSort] = useState<typeof sorts[number]>("Recent");
   const [q, setQ] = useState("");
   const refresh = () => setMixes(getMixes());
   useEffect(refresh, []);
-  useEffect(() => { const c = params.get("cat"); if (c) setQ(""); }, [params]);
+  useEffect(() => {
+    const c = params.get("cat");
+    if (c === "Warm" || c === "Cool" || c === "Neutral") setTemp(c);
+  }, [params]);
 
   const filtered = useMemo(() => {
-    let list = [...mixes];
+    let list = mixes.map(m => ({ ...m, _temp: classifyTemperature(m.hex) as Temperature }));
     if (type !== "All") list = list.filter(m => m.paintType === type);
-    if (q.trim()) list = list.filter(m => m.name.toLowerCase().includes(q.toLowerCase()));
+    if (temp !== "All") list = list.filter(m => m._temp === temp);
+    list = fuzzyFilter(list, q, m => [m.name, m._temp, m.paintType, m.hex]);
     if (sort === "Name") list.sort((a, b) => a.name.localeCompare(b.name));
-    if (sort === "Colour") list.sort((a, b) => a.hex.localeCompare(b.hex));
+    else if (sort === "Warm → Cool") list.sort((a, b) => temperatureRank(a._temp) - temperatureRank(b._temp));
+    else if (sort === "Cool → Warm") list.sort((a, b) => temperatureRank(b._temp) - temperatureRank(a._temp));
+    else if (!q.trim()) list.sort((a, b) => b.savedAt - a.savedAt);
     return list;
-  }, [mixes, type, q, sort]);
+  }, [mixes, type, temp, q, sort]);
 
   const handleDelete = (id: string, name: string) => {
     if (confirm(`Delete "${name}"?`)) {
