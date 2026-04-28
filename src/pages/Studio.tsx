@@ -8,6 +8,7 @@ import { hexToRgb, hslToHex, nearestColour } from "@/data/colours";
 import { deleteMix, getMixes, getPrefs, saveMix, setPrefs, SavedMix } from "@/lib/storage";
 import { Bookmark, Camera, Download, Search, Trash2, User } from "lucide-react";
 import { toast } from "sonner";
+import { classifyTemperature, fuzzyFilter, temperatureRank, type Temperature } from "@/lib/search";
 
 const brands = ["Winsor & Newton", "Liquitex", "Golden", "Holbein"];
 
@@ -19,6 +20,8 @@ const Studio = () => {
   const [brand, setBrand] = useState(getPrefs().brand);
   const [mixes, setMixes] = useState<SavedMix[]>([]);
   const [q, setQ] = useState("");
+  const [temp, setTemp] = useState<"All" | Temperature>("All");
+  const [sort, setSort] = useState<"Recent" | "Name" | "Warm → Cool" | "Cool → Warm">("Recent");
 
   useEffect(() => { setMixes(getMixes()); }, []);
 
@@ -26,7 +29,16 @@ const Studio = () => {
   const matched = useMemo(() => nearestColour(hex), [hex]);
   const rgb = hexToRgb(hex);
 
-  const filtered = mixes.filter(m => m.name.toLowerCase().includes(q.toLowerCase()));
+  const filtered = useMemo(() => {
+    let list = mixes.map(m => ({ ...m, _temp: classifyTemperature(m.hex) }));
+    if (temp !== "All") list = list.filter(m => m._temp === temp);
+    list = fuzzyFilter(list, q, m => [m.name, m._temp, m.paintType, m.hex]);
+    if (sort === "Name") list.sort((a, b) => a.name.localeCompare(b.name));
+    else if (sort === "Warm → Cool") list.sort((a, b) => temperatureRank(a._temp) - temperatureRank(b._temp));
+    else if (sort === "Cool → Warm") list.sort((a, b) => temperatureRank(b._temp) - temperatureRank(a._temp));
+    else if (!q.trim()) list.sort((a, b) => b.savedAt - a.savedAt);
+    return list;
+  }, [mixes, q, temp, sort]);
 
   const handleSave = () => {
     const prefs = getPrefs();
@@ -153,18 +165,46 @@ const Studio = () => {
           <div className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">My Library</div>
           <div className="relative">
             <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground" />
-            <input value={q} onChange={e => setQ(e.target.value)} placeholder="Search..." className="w-full pl-9 pr-3 py-2 text-sm rounded-xl bg-surface border border-border focus:outline-none focus:ring-2 focus:ring-primary/30" />
+            <input value={q} onChange={e => setQ(e.target.value)} placeholder="Fuzzy search…" className="w-full pl-9 pr-3 py-2 text-sm rounded-xl bg-surface border border-border focus:outline-none focus:ring-2 focus:ring-primary/30" />
           </div>
-          <div className="space-y-2 max-h-[440px] overflow-y-auto -mx-1 px-1">
+          <div className="flex gap-1 flex-wrap">
+            {(["All", "Warm", "Cool", "Neutral"] as const).map(t => {
+              const dot = t === "Warm" ? "#E8572A" : t === "Cool" ? "#5B7FBF" : t === "Neutral" ? "#9E9485" : null;
+              return (
+                <button
+                  key={t}
+                  onClick={() => setTemp(t)}
+                  className={`pill text-[11px] transition-colors ${temp === t ? "bg-primary text-primary-foreground" : "bg-surface border border-border"}`}
+                >
+                  {dot && <span className="h-2 w-2 rounded-full" style={{ background: dot }} />}
+                  {t}
+                </button>
+              );
+            })}
+          </div>
+          <div className="flex gap-1 flex-wrap text-[11px]">
+            {(["Recent", "Name", "Warm → Cool", "Cool → Warm"] as const).map(s => (
+              <button
+                key={s}
+                onClick={() => setSort(s)}
+                className={`px-2 py-1 rounded-full whitespace-nowrap ${sort === s ? "bg-foreground text-background font-semibold" : "text-muted-foreground hover:bg-surface"}`}
+              >{s}</button>
+            ))}
+          </div>
+          <div className="space-y-2 max-h-[380px] overflow-y-auto -mx-1 px-1">
             {filtered.length === 0 ? (
-              <div className="text-center py-8 text-xs text-muted-foreground">No saved mixes yet.</div>
+              <div className="text-center py-8 text-xs text-muted-foreground">
+                {q ? `No matches for "${q}"` : "No saved mixes yet."}
+              </div>
             ) : filtered.map(m => (
               <div key={m.id} className="group flex items-center gap-3 p-2 rounded-xl hover:bg-surface transition-colors">
                 <button onClick={() => nav(`/recipe/saved-${m.id}`)} className="flex items-center gap-3 flex-1 min-w-0 text-left">
-                  <div className="h-10 w-10 rounded-lg shadow-soft border border-border shrink-0" style={{ background: m.hex }} />
+                  <div className="h-10 w-10 rounded-lg shadow-soft border border-border shrink-0 relative" style={{ background: m.hex }}>
+                    <span className="absolute -bottom-0.5 -right-0.5 h-3 w-3 rounded-full border-2 border-card" style={{ background: m._temp === "Warm" ? "#E8572A" : m._temp === "Cool" ? "#5B7FBF" : "#9E9485" }} />
+                  </div>
                   <div className="flex-1 min-w-0">
                     <div className="text-sm font-medium truncate">{m.name}</div>
-                    <div className="text-[10px] text-muted-foreground">{m.recipe.total} drops · {m.paintType}</div>
+                    <div className="text-[10px] text-muted-foreground">{m.recipe.total} drops · {m.paintType} · {m._temp}</div>
                   </div>
                 </button>
                 <button onClick={() => { deleteMix(m.id); setMixes(getMixes()); }} className="opacity-0 group-hover:opacity-100 text-muted-foreground hover:text-destructive transition-opacity"><Trash2 size={14} /></button>
@@ -172,7 +212,7 @@ const Studio = () => {
             ))}
           </div>
           <div className="flex items-center justify-between text-xs pt-3 border-t border-border">
-            <span className="text-muted-foreground">{mixes.length} mixes saved</span>
+            <span className="text-muted-foreground">{filtered.length} of {mixes.length} mixes</span>
           </div>
           <button onClick={() => nav("/scan")} className="w-full text-sm font-semibold text-primary hover:bg-primary-soft py-2 rounded-xl transition-colors flex items-center justify-center gap-1.5">
             <Camera size={14} /> Scan new colour +
