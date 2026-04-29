@@ -3,14 +3,14 @@ import { useEffect, useMemo, useState } from "react";
 import { Logo } from "@/components/Logo";
 import { ColourWheel } from "@/components/ColourWheel";
 import { ProportionBar } from "@/components/ProportionBar";
-import { IngredientList } from "@/components/IngredientList";
 import { hexToRgb, hslToHex, nearestColour } from "@/data/colours";
 import { deleteMix, getMixes, getPrefs, saveMix, setPrefs, SavedMix } from "@/lib/storage";
-import { Bookmark, Camera, Download, Search, Trash2, User } from "lucide-react";
+import { Bookmark, Camera, ChevronRight, Download, Search, Trash2, User } from "lucide-react";
 import { toast } from "sonner";
 import { classifyTemperature, fuzzyFilter, temperatureRank, type Temperature } from "@/lib/search";
 
 const brands = ["Winsor & Newton", "Liquitex", "Golden", "Holbein"];
+const SCALES = [1, 2, 3];
 
 const Studio = () => {
   const nav = useNavigate();
