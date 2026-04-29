@@ -1,4 +1,4 @@
-import { Recipe, textOn } from "@/data/colours";
+import { Recipe } from "@/data/colours";
 import { DropIcon } from "./DropIcon";
 import { useEffect, useState } from "react";
 
