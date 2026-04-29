@@ -64,7 +64,7 @@ const Studio = () => {
                 { to: "/library", l: "Library" },
                 { to: "/picker", l: "Learn" },
               ].map(n => (
-                <button key={n.to} onClick={() => nav(n.to)} className="px-3 py-2 text-sm font-medium text-muted-foreground hover:text-foreground rounded-lg hover:bg-surface transition-colors">{n.l}</button>
+                <button key={n.to} onClick={() => nav(n.to)} className="px-3 py-2 text-sm font-medium text-muted-foreground hover:text-foreground rounded-xl hover:bg-surface transition-colors duration-200 ease-out">{n.l}</button>
               ))}
             </nav>
           </div>
@@ -79,7 +79,7 @@ const Studio = () => {
       {/* Three panel layout */}
       <div className="max-w-[1440px] mx-auto px-6 py-6 grid gap-6 lg:grid-cols-[280px_1fr_240px]">
         {/* LEFT */}
-        <aside className="surface-card p-5 space-y-5 h-fit lg:sticky lg:top-24">
+        <aside className="bg-surface border border-border rounded-xl p-5 space-y-5 h-fit lg:sticky lg:top-24">
           <div>
             <div className="text-xs font-semibold text-muted-foreground mb-3 uppercase tracking-wider">Colour Wheel</div>
             <div className="flex justify-center"><ColourWheel size={220} hue={hue} saturation={sat} onChange={(h, s) => { setHue(h); setSat(s); }} /></div>
@@ -114,7 +114,7 @@ const Studio = () => {
         </aside>
 
         {/* CENTER */}
-        <main className="surface-card p-8">
+        <main className="bg-card border border-border rounded-xl p-8" style={{ boxShadow: "0 2px 12px rgba(0,0,0,0.06)" }}>
           <div className="text-xs font-semibold text-muted-foreground mb-2 uppercase tracking-wider">Drop Recipe</div>
           <div className="flex items-end justify-between gap-4 mb-1 flex-wrap">
             <div className="flex items-center gap-4">
@@ -139,7 +139,7 @@ const Studio = () => {
               <button
                 key={s}
                 onClick={() => setScale(s)}
-                className={`px-4 py-2 rounded-full text-sm font-semibold transition-all ${scale === s ? "bg-primary text-primary-foreground shadow-pop" : "bg-surface text-foreground hover:bg-border"}`}
+                className={`px-4 py-2 rounded-full text-sm font-semibold transition-all duration-200 ease-out ${scale === s ? "bg-primary text-primary-foreground shadow-pop" : "bg-surface text-foreground hover:bg-border"}`}
               >
                 {matched.recipe.total * s} drops {s > 1 && <span className="opacity-70 ml-1">({s}×)</span>}
               </button>
@@ -180,7 +180,7 @@ const Studio = () => {
                     const pct = parts[parts.length - 1];
                     const name = parts.slice(0, -1).join(" ");
                     return (
-                      <button key={b} className="w-full flex items-center justify-between py-2.5 text-sm hover:bg-surface/60 transition-colors -mx-2 px-2 rounded">
+                      <button key={b} className="w-full flex items-center justify-between py-2.5 text-sm hover:bg-surface/60 transition-colors duration-200 ease-out -mx-2 px-2 rounded">
                         <span className="font-medium">{name}</span>
                         <span className="flex items-center gap-2">
                           <span className="font-bold text-success">{pct}</span>
@@ -201,11 +201,11 @@ const Studio = () => {
         </main>
 
         {/* RIGHT */}
-        <aside className="surface-card p-5 space-y-4 h-fit lg:sticky lg:top-24">
+        <aside className="bg-surface border border-border rounded-xl p-5 space-y-4 h-fit lg:sticky lg:top-24">
           <div className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">My Library</div>
           <div className="relative">
             <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground" />
-            <input value={q} onChange={e => setQ(e.target.value)} placeholder="Fuzzy search…" className="w-full pl-9 pr-3 py-2 text-sm rounded-xl bg-surface border border-border focus:outline-none focus:ring-2 focus:ring-primary/30" />
+            <input value={q} onChange={e => setQ(e.target.value)} placeholder="Fuzzy search…" className="w-full pl-9 pr-3 py-2 text-sm rounded-xl bg-card border border-border focus:outline-none focus:ring-2 focus:ring-primary/30 transition-shadow duration-200 ease-out duration-200 ease-out" />
           </div>
           <div className="flex gap-1 flex-wrap">
             {(["All", "Warm", "Cool", "Neutral"] as const).map(t => {
@@ -214,7 +214,7 @@ const Studio = () => {
                 <button
                   key={t}
                   onClick={() => setTemp(t)}
-                  className={`pill text-[11px] transition-colors ${temp === t ? "bg-primary text-primary-foreground" : "bg-surface border border-border"}`}
+                  className={`pill text-[11px] transition-colors duration-200 ease-out ${temp === t ? "bg-primary text-primary-foreground" : "bg-surface border border-border"}`}
                 >
                   {dot && <span className="h-2 w-2 rounded-full" style={{ background: dot }} />}
                   {t}
@@ -237,9 +237,9 @@ const Studio = () => {
                 {q ? `No matches for "${q}"` : "No saved mixes yet."}
               </div>
             ) : filtered.map(m => (
-              <div key={m.id} className="group flex items-center gap-3 p-2 rounded-xl hover:bg-surface transition-colors">
+              <div key={m.id} className="group flex items-center gap-3 p-2 rounded-xl hover:bg-surface transition-colors duration-200 ease-out">
                 <button onClick={() => nav(`/recipe/saved-${m.id}`)} className="flex items-center gap-3 flex-1 min-w-0 text-left">
-                  <div className="h-10 w-10 rounded-lg shadow-soft border border-border shrink-0 relative" style={{ background: m.hex }}>
+                  <div className="h-10 w-10 rounded-xl shadow-soft border border-border shrink-0 relative" style={{ background: m.hex }}>
                     <span className="absolute -bottom-0.5 -right-0.5 h-3 w-3 rounded-full border-2 border-card" style={{ background: m._temp === "Warm" ? "#E8572A" : m._temp === "Cool" ? "#5B7FBF" : "#9E9485" }} />
                   </div>
                   <div className="flex-1 min-w-0">
@@ -247,14 +247,14 @@ const Studio = () => {
                     <div className="text-[10px] text-muted-foreground">{m.recipe.total} drops · {m.paintType} · {m._temp}</div>
                   </div>
                 </button>
-                <button onClick={() => { deleteMix(m.id); setMixes(getMixes()); }} className="opacity-0 group-hover:opacity-100 text-muted-foreground hover:text-destructive transition-opacity"><Trash2 size={14} /></button>
+                <button onClick={() => { deleteMix(m.id); setMixes(getMixes()); }} className="opacity-0 group-hover:opacity-100 text-muted-foreground hover:text-destructive transition-opacity duration-200 ease-out"><Trash2 size={14} /></button>
               </div>
             ))}
           </div>
           <div className="flex items-center justify-between text-xs pt-3 border-t border-border">
             <span className="text-muted-foreground">{filtered.length} of {mixes.length} mixes</span>
           </div>
-          <button onClick={() => nav("/scan")} className="w-full text-sm font-semibold text-primary hover:bg-primary-soft py-2 rounded-xl transition-colors flex items-center justify-center gap-1.5">
+          <button onClick={() => nav("/scan")} className="w-full text-sm font-semibold text-primary hover:bg-primary-soft py-2 rounded-xl transition-colors duration-200 ease-out flex items-center justify-center gap-1.5">
             <Camera size={14} /> Scan new colour +
           </button>
         </aside>

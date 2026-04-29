@@ -92,7 +92,7 @@ const ColourDetail = () => {
                 { c: related.analogousR, label: "Analogous" },
               ].map((x, i) => (
                 <button key={i} onClick={() => nav(`/colour/${x.c.id}`)} className="text-center group">
-                  <div className="aspect-square rounded-full shadow-soft border border-border mb-2 mx-auto transition-transform group-hover:scale-105" style={{ background: x.c.hex, maxWidth: 72 }} />
+                  <div className="aspect-square rounded-full shadow-soft border border-border mb-2 mx-auto transition-transform duration-200 ease-out group-hover:scale-105" style={{ background: x.c.hex, maxWidth: 72 }} />
                   <div className="text-[11px] font-semibold">{x.label}</div>
                   <div className="text-[10px] text-muted-foreground truncate">{x.c.name}</div>
                 </button>
@@ -117,7 +117,7 @@ const ColourDetail = () => {
           <div className="grid grid-cols-3 gap-3">
             {colours.filter(c => c.id !== colour.id).slice(0, 3).map(c => (
               <button key={c.id} onClick={() => nav(`/colour/${c.id}`)} className="text-left group">
-                <div className="aspect-square rounded-xl shadow-soft border border-border mb-2 transition-transform group-hover:-translate-y-0.5" style={{ background: c.hex }} />
+                <div className="aspect-square rounded-xl shadow-soft border border-border mb-2 transition-transform duration-200 ease-out group-hover:-translate-y-0.5" style={{ background: c.hex }} />
                 <div className="text-[11px] font-semibold truncate">{c.name}</div>
               </button>
             ))}
@@ -130,7 +130,7 @@ const ColourDetail = () => {
           <ProportionBar recipe={colour.recipe} />
         </div>
 
-        <button onClick={() => nav(`/recipe/${colour.id}`)} className="w-full inline-flex items-center justify-center gap-2 bg-primary text-primary-foreground font-semibold rounded-lg py-4 shadow-pop transition-all hover:opacity-95 active:scale-[0.98]">
+        <button onClick={() => nav(`/recipe/${colour.id}`)} className="w-full inline-flex items-center justify-center gap-2 bg-primary text-primary-foreground font-semibold rounded-xl py-4 shadow-pop transition-all duration-200 ease-out hover:opacity-95 active:scale-[0.98]">
           View full recipe →
         </button>
       </div>

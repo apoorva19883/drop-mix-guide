@@ -30,7 +30,7 @@ const Onboarding = () => {
         <div className="flex items-center justify-end mb-8">
           <div className="flex gap-1.5">
             {[0, 1, 2].map(i => (
-              <div key={i} className={`h-1.5 rounded-full transition-all ${i === step ? "w-6 bg-primary" : "w-1.5 bg-border"}`} />
+              <div key={i} className={`h-1.5 rounded-full transition-all duration-200 ease-out ${i === step ? "w-6 bg-primary" : "w-1.5 bg-border"}`} />
             ))}
           </div>
         </div>
@@ -61,7 +61,7 @@ const Onboarding = () => {
 
             <div className="w-full space-y-3 mt-8">
               <button
-                className="w-full inline-flex items-center justify-center gap-2 bg-primary text-primary-foreground font-semibold rounded-lg py-4 text-base shadow-pop transition-all hover:opacity-95 active:scale-[0.98]"
+                className="w-full inline-flex items-center justify-center gap-2 bg-primary text-primary-foreground font-semibold rounded-xl py-4 text-base shadow-pop transition-all duration-200 ease-out hover:opacity-95 active:scale-[0.98]"
                 onClick={() => setStep(1)}
               >
                 <Camera size={18} /> Scan a colour
@@ -85,7 +85,7 @@ const Onboarding = () => {
                   <button
                     key={p.id}
                     onClick={() => setPaint(p.id)}
-                    className={`relative text-left p-4 rounded-xl bg-card transition-all duration-300 ${
+                    className={`relative text-left p-4 rounded-xl bg-card transition-all duration-200 ease-out duration-300 ${
                       sel ? "ring-2 ring-primary shadow-pop" : "ring-1 ring-border hover:ring-muted-foreground/40"
                     }`}
                     style={{ boxShadow: sel ? undefined : "0 2px 12px rgba(0,0,0,0.06)" }}
@@ -96,7 +96,7 @@ const Onboarding = () => {
                       </span>
                     )}
                     <div
-                      className="h-10 w-10 rounded-full mb-3 transition-transform"
+                      className="h-10 w-10 rounded-full mb-3 transition-transform duration-200 ease-out"
                       style={{ background: p.tint, transform: sel ? "scale(1.05)" : "scale(1)" }}
                     />
                     <div className="font-semibold text-[15px]">{p.id}</div>
@@ -111,7 +111,7 @@ const Onboarding = () => {
               })}
             </div>
             <button
-              className="w-full inline-flex items-center justify-center gap-2 bg-primary text-primary-foreground font-semibold rounded-lg py-4 mt-8 shadow-pop transition-all hover:opacity-95 active:scale-[0.98]"
+              className="w-full inline-flex items-center justify-center gap-2 bg-primary text-primary-foreground font-semibold rounded-xl py-4 mt-8 shadow-pop transition-all duration-200 ease-out hover:opacity-95 active:scale-[0.98]"
               onClick={() => setStep(2)}
             >
               Continue with {paint} <ArrowRight size={18} />
@@ -138,7 +138,7 @@ const Onboarding = () => {
               </div>
             </div>
             <button
-              className="w-full inline-flex items-center justify-center gap-2 bg-primary text-primary-foreground font-semibold rounded-lg py-4 mt-8 shadow-pop transition-all hover:opacity-95 active:scale-[0.98]"
+              className="w-full inline-flex items-center justify-center gap-2 bg-primary text-primary-foreground font-semibold rounded-xl py-4 mt-8 shadow-pop transition-all duration-200 ease-out hover:opacity-95 active:scale-[0.98]"
               onClick={finish}
             >
               Explore MixRight <ArrowRight size={18} />
