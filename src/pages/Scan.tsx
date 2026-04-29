@@ -87,20 +87,17 @@ const Scan = () => {
             className="relative w-full rounded-3xl overflow-hidden"
             style={{ height: "min(70vh, 520px)", boxShadow: "0 2px 12px rgba(0,0,0,0.06)" }}
           >
-            {/* Realistic warm gradient: layered radial gradients */}
+            {/* Solid dark base */}
+            <div className="absolute inset-0" style={{ background: "#111111" }} />
+            {/* Subtle vignette glow only behind the reticle */}
             <div
-              className="absolute inset-0 transition-[background] duration-700"
+              className="absolute inset-0 transition-opacity duration-300 ease-out"
               style={{
-                background: `
-                  radial-gradient(circle at 30% 25%, ${hex}aa, transparent 55%),
-                  radial-gradient(circle at 75% 70%, #2E7D5288, transparent 60%),
-                  radial-gradient(circle at 60% 35%, #F5D76E66, transparent 50%),
-                  radial-gradient(circle at 50% 50%, ${hex}, #1a1a1a 90%)
-                `,
+                background: `radial-gradient(circle at 50% 50%, ${hex}33 0%, transparent 38%)`,
               }}
             />
             {/* Torch glow when on */}
-            {torch && <div className="absolute inset-0 bg-white/10 mix-blend-overlay" />}
+            {torch && <div className="absolute inset-0 bg-white/5 mix-blend-overlay transition-opacity duration-200 ease-out" />}
 
             {/* LIVE badge top-left */}
             <div className="absolute top-3 left-3 inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-success text-success-foreground text-[10px] font-bold tracking-wide shadow-card" style={{ animation: "live-pulse 1.6s ease-in-out infinite" }}>
@@ -110,22 +107,27 @@ const Scan = () => {
             {/* Torch toggle top-right */}
             <button
               onClick={() => setTorch(t => !t)}
-              className="absolute top-3 right-3 h-10 w-10 grid place-items-center rounded-full bg-black/40 text-white backdrop-blur transition-colors hover:bg-black/60"
+              className="absolute top-3 right-3 h-10 w-10 grid place-items-center rounded-full bg-white/10 text-white backdrop-blur transition-colors duration-200 ease-out hover:bg-white/20"
               aria-label="Toggle torch"
             >
               {torch ? <Sun size={16} /> : <Moon size={16} />}
             </button>
 
-            {/* Reticle: dashed outer ring + inner filled circle */}
+            {/* Reticle — gradient circle in center */}
             <div className="absolute inset-0 grid place-items-center pointer-events-none">
-              <div className="relative" style={{ width: 180, height: 180 }}>
+              <div className="relative" style={{ width: 200, height: 200 }}>
+                {/* Dashed outer ring */}
                 <div
-                  className="absolute inset-0 rounded-full border-2 border-dashed border-white/85"
+                  className="absolute inset-0 rounded-full border-2 border-dashed border-white/90"
                   style={{ animation: "spin-slow 18s linear infinite" }}
                 />
+                {/* Inner gradient sample disc */}
                 <div
-                  className="absolute rounded-full border-2 border-white/90 shadow-pop transition-colors duration-500"
-                  style={{ inset: 36, background: hex }}
+                  className="absolute rounded-full border-2 border-white shadow-pop transition-[background] duration-300 ease-out"
+                  style={{
+                    inset: 30,
+                    background: `radial-gradient(circle at 35% 30%, ${hex} 0%, ${hex} 55%, rgba(0,0,0,0.35) 100%)`,
+                  }}
                 />
                 {/* Crosshair */}
                 <div className="absolute left-1/2 top-1/2 h-px w-8 -translate-x-1/2 -translate-y-1/2 bg-white/70" />
