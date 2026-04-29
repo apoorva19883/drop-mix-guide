@@ -22,6 +22,7 @@ const Studio = () => {
   const [q, setQ] = useState("");
   const [temp, setTemp] = useState<"All" | Temperature>("All");
   const [sort, setSort] = useState<"Recent" | "Name" | "Warm → Cool" | "Cool → Warm">("Recent");
+  const [scale, setScale] = useState(1);
 
   useEffect(() => { setMixes(getMixes()); }, []);
 
