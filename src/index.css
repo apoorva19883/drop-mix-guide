@@ -98,14 +98,16 @@
     box-shadow: var(--shadow-card);
   }
   .pill {
-    @apply inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-xs font-medium;
+    @apply inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-xs font-medium transition-colors duration-200 ease-out;
   }
   .btn-primary {
-    @apply inline-flex items-center justify-center gap-2 bg-primary text-primary-foreground font-semibold rounded-full px-6 py-3.5 transition-all hover:opacity-90 active:scale-[0.98];
+    @apply inline-flex items-center justify-center gap-2 bg-primary text-primary-foreground font-semibold px-6 py-3.5 transition-all duration-200 ease-out hover:opacity-90 active:scale-[0.98];
+    border-radius: 12px;
     box-shadow: var(--shadow-pop);
   }
   .btn-ghost {
-    @apply inline-flex items-center justify-center gap-2 bg-transparent text-foreground font-medium rounded-full px-6 py-3.5 border border-border transition-all hover:bg-surface;
+    @apply inline-flex items-center justify-center gap-2 bg-transparent text-foreground font-medium px-6 py-3.5 border border-border transition-all duration-200 ease-out hover:bg-surface;
+    border-radius: 12px;
   }
   .scrollbar-hide::-webkit-scrollbar { display: none; }
   .scrollbar-hide { scrollbar-width: none; }
