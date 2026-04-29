@@ -205,7 +205,7 @@ const Studio = () => {
           <div className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">My Library</div>
           <div className="relative">
             <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground" />
-            <input value={q} onChange={e => setQ(e.target.value)} placeholder="Fuzzy search…" className="w-full pl-9 pr-3 py-2 text-sm rounded-xl bg-surface border border-border focus:outline-none focus:ring-2 focus:ring-primary/30" />
+            <input value={q} onChange={e => setQ(e.target.value)} placeholder="Fuzzy search…" className="w-full pl-9 pr-3 py-2 text-sm rounded-lg bg-card border border-border focus:outline-none focus:ring-2 focus:ring-primary/30 transition-shadow duration-200 ease-out" />
           </div>
           <div className="flex gap-1 flex-wrap">
             {(["All", "Warm", "Cool", "Neutral"] as const).map(t => {
