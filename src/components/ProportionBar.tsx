@@ -23,7 +23,6 @@ export const ProportionBar = ({ recipe, scale = 1, height = 52, showLabels = fal
       >
         {recipe.ingredients.map((ing, i) => {
           const pct = (ing.drops / recipe.total) * 100;
-          const fg = textOn(ing.hex);
           const dropCount = ing.drops * scale;
           return (
             <div
