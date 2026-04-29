@@ -79,7 +79,7 @@ const Studio = () => {
       {/* Three panel layout */}
       <div className="max-w-[1440px] mx-auto px-6 py-6 grid gap-6 lg:grid-cols-[280px_1fr_240px]">
         {/* LEFT */}
-        <aside className="surface-card p-5 space-y-5 h-fit lg:sticky lg:top-24">
+        <aside className="bg-surface border border-border rounded-xl p-5 space-y-5 h-fit lg:sticky lg:top-24">
           <div>
             <div className="text-xs font-semibold text-muted-foreground mb-3 uppercase tracking-wider">Colour Wheel</div>
             <div className="flex justify-center"><ColourWheel size={220} hue={hue} saturation={sat} onChange={(h, s) => { setHue(h); setSat(s); }} /></div>
