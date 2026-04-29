@@ -121,20 +121,18 @@ const Library = () => {
             {filtered.map(m => (
               <div
                 key={m.id}
-                className="rounded-xl overflow-hidden group relative bg-card transition-all hover:-translate-y-0.5"
+                className="rounded-xl overflow-hidden group relative bg-card transition-all duration-200 ease-out hover:-translate-y-0.5"
                 style={{ boxShadow: "0 2px 12px rgba(0,0,0,0.06)" }}
               >
                 <button onClick={() => nav(`/recipe/saved-${m.id}`)} className="block w-full text-left">
-                  {/* 65% colour fill */}
-                  <div className="relative w-full" style={{ background: m.hex, paddingTop: "100%" }}>
-                    <div className="absolute inset-0" style={{ background: m.hex }} />
-                    {/* Overlay with name on hover */}
-                    <div className="absolute inset-x-0 bottom-0 px-3 py-2 bg-gradient-to-t from-black/60 to-transparent text-white text-sm font-semibold opacity-0 group-hover:opacity-100 transition-opacity">
+                  {/* 65% solid colour fill */}
+                  <div className="relative w-full" style={{ height: 0, paddingBottom: "65%", background: m.hex }}>
+                    <div className="absolute inset-x-0 bottom-0 px-3 py-2 bg-gradient-to-t from-black/55 to-transparent text-white text-sm font-semibold opacity-0 group-hover:opacity-100 transition-opacity duration-200 ease-out">
                       {m.name}
                     </div>
                   </div>
                   {/* 35% white meta */}
-                  <div className="p-3 bg-card">
+                  <div className="bg-card px-3 py-2.5" style={{ minHeight: "35%" }}>
                     <div className="font-semibold text-sm truncate">{m.name}</div>
                     <div className="flex items-center justify-between mt-1.5">
                       <span className="pill bg-surface text-[10px]">{m.paintType}</span>
@@ -144,7 +142,7 @@ const Library = () => {
                 </button>
                 <button
                   onClick={() => handleDelete(m.id, m.name)}
-                  className="absolute top-2 right-2 h-8 w-8 grid place-items-center rounded-full bg-black/40 text-white backdrop-blur opacity-0 group-hover:opacity-100 transition-opacity"
+                  className="absolute top-2 right-2 h-8 w-8 grid place-items-center rounded-full bg-black/40 text-white backdrop-blur opacity-0 group-hover:opacity-100 transition-opacity duration-200 ease-out"
                 ><Trash2 size={14} /></button>
               </div>
             ))}
