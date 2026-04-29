@@ -17,14 +17,14 @@ export const BottomNav = () => (
           key={to}
           to={to}
           className={({ isActive }) =>
-            `flex flex-col items-center gap-1 py-2.5 text-[10px] font-medium transition-colors ${
+            `flex flex-col items-center gap-1 py-2.5 text-[10px] font-medium transition-colors duration-200 ease-out ${
               isActive ? "text-primary" : "text-muted-foreground hover:text-foreground"
             }`
           }
         >
           {({ isActive }) => (
             <>
-              <div className={`p-1.5 rounded-xl transition-all ${isActive ? "bg-primary/10" : ""}`}>
+              <div className={`p-1.5 rounded-xl transition-all duration-200 ease-out ${isActive ? "bg-primary/10" : ""}`}>
                 <Icon size={20} strokeWidth={isActive ? 2.4 : 2} />
               </div>
               {label}

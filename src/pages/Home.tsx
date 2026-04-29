@@ -32,7 +32,7 @@ const Home = () => {
     <MobileShell>
       <header className="flex items-center justify-between px-5 pt-6 pb-2">
         <Logo />
-        <button onClick={() => nav("/library")} className="h-10 w-10 rounded-full bg-surface grid place-items-center hover:bg-border transition-colors">
+        <button onClick={() => nav("/library")} className="h-10 w-10 rounded-full bg-surface grid place-items-center hover:bg-border transition-colors duration-200 ease-out">
           <Search size={18} />
         </button>
       </header>
@@ -77,7 +77,7 @@ const Home = () => {
             <button
               key={c.label}
               onClick={() => nav(`/library?cat=${c.filter}`)}
-              className="pill bg-card border border-border hover:border-primary/40 transition-colors"
+              className="pill bg-card border border-border hover:border-primary/40 transition-colors duration-200 ease-out"
             >
               <span className="h-3 w-3 rounded-full" style={{ background: c.color }} />
               {c.label}
@@ -91,7 +91,7 @@ const Home = () => {
           <Sparkles size={16} className="text-primary" />
           <h2 className="font-display text-lg font-bold">Featured mix of the day</h2>
         </div>
-        <button onClick={() => nav(`/colour/${featured.id}`)} className="surface-card w-full p-5 text-left hover:shadow-pop transition-shadow">
+        <button onClick={() => nav(`/colour/${featured.id}`)} className="surface-card w-full p-5 text-left hover:shadow-pop transition-shadow duration-200 ease-out">
           <div className="flex items-center gap-4 mb-4">
             <div className="h-20 w-20 rounded-2xl shadow-soft" style={{ background: featured.hex }} />
             <div className="flex-1 min-w-0">

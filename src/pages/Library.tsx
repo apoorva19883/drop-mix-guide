@@ -73,7 +73,7 @@ const Library = () => {
             <button
               key={t}
               onClick={() => setType(t)}
-              className={`relative shrink-0 pb-2.5 text-sm transition-colors ${type === t ? "font-semibold text-foreground" : "text-muted-foreground hover:text-foreground"}`}
+              className={`relative shrink-0 pb-2.5 text-sm transition-colors duration-200 ease-out ${type === t ? "font-semibold text-foreground" : "text-muted-foreground hover:text-foreground"}`}
             >
               {t}
               {type === t && <span className="absolute left-0 right-0 -bottom-px h-0.5 bg-primary rounded-full" />}
@@ -89,7 +89,7 @@ const Library = () => {
               <button
                 key={t}
                 onClick={() => setTemp(t)}
-                className={`pill shrink-0 transition-all ${temp === t ? "bg-primary text-primary-foreground" : "bg-card border border-border"}`}
+                className={`pill shrink-0 transition-all duration-200 ease-out ${temp === t ? "bg-primary text-primary-foreground" : "bg-card border border-border"}`}
               >
                 {dot && <span className="h-2.5 w-2.5 rounded-full" style={{ background: dot }} />}
                 {t}
@@ -102,7 +102,7 @@ const Library = () => {
           <span className="text-muted-foreground shrink-0">{filtered.length} {filtered.length === 1 ? "mix" : "mixes"}</span>
           <div className="flex gap-1 overflow-x-auto scrollbar-hide">
             {sorts.map(s => (
-              <button key={s} onClick={() => setSort(s)} className={`px-2.5 py-1 rounded-full whitespace-nowrap transition-colors ${sort === s ? "bg-surface font-semibold" : "text-muted-foreground"}`}>{s}</button>
+              <button key={s} onClick={() => setSort(s)} className={`px-2.5 py-1 rounded-full whitespace-nowrap transition-colors duration-200 ease-out ${sort === s ? "bg-surface font-semibold" : "text-muted-foreground"}`}>{s}</button>
             ))}
           </div>
         </div>
@@ -121,13 +121,13 @@ const Library = () => {
             {filtered.map(m => (
               <div
                 key={m.id}
-                className="rounded-xl overflow-hidden group relative bg-card transition-all duration-200 ease-out hover:-translate-y-0.5"
+                className="rounded-xl overflow-hidden group relative bg-card transition-all duration-200 ease-out duration-200 ease-out hover:-translate-y-0.5"
                 style={{ boxShadow: "0 2px 12px rgba(0,0,0,0.06)" }}
               >
                 <button onClick={() => nav(`/recipe/saved-${m.id}`)} className="block w-full text-left">
                   {/* 65% solid colour fill */}
                   <div className="relative w-full" style={{ height: 0, paddingBottom: "65%", background: m.hex }}>
-                    <div className="absolute inset-x-0 bottom-0 px-3 py-2 bg-gradient-to-t from-black/55 to-transparent text-white text-sm font-semibold opacity-0 group-hover:opacity-100 transition-opacity duration-200 ease-out">
+                    <div className="absolute inset-x-0 bottom-0 px-3 py-2 bg-gradient-to-t from-black/55 to-transparent text-white text-sm font-semibold opacity-0 group-hover:opacity-100 transition-opacity duration-200 ease-out duration-200 ease-out">
                       {m.name}
                     </div>
                   </div>
@@ -142,7 +142,7 @@ const Library = () => {
                 </button>
                 <button
                   onClick={() => handleDelete(m.id, m.name)}
-                  className="absolute top-2 right-2 h-8 w-8 grid place-items-center rounded-full bg-black/40 text-white backdrop-blur opacity-0 group-hover:opacity-100 transition-opacity duration-200 ease-out"
+                  className="absolute top-2 right-2 h-8 w-8 grid place-items-center rounded-full bg-black/40 text-white backdrop-blur opacity-0 group-hover:opacity-100 transition-opacity duration-200 ease-out duration-200 ease-out"
                 ><Trash2 size={14} /></button>
               </div>
             ))}
@@ -153,7 +153,7 @@ const Library = () => {
       {/* Floating scan button */}
       <button
         onClick={() => nav("/scan")}
-        className="fixed bottom-24 right-5 z-30 h-14 px-5 rounded-full bg-primary text-primary-foreground font-semibold inline-flex items-center gap-2 shadow-pop transition-transform hover:scale-105 active:scale-95 lg:hidden"
+        className="fixed bottom-24 right-5 z-30 h-14 px-5 rounded-full bg-primary text-primary-foreground font-semibold inline-flex items-center gap-2 shadow-pop transition-transform duration-200 ease-out hover:scale-105 active:scale-95 lg:hidden"
         aria-label="Scan a new colour"
       >
         <Plus size={18} strokeWidth={2.5} /> <Camera size={16} />

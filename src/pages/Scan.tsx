@@ -72,7 +72,7 @@ const Scan = () => {
             <button
               key={t}
               onClick={() => setTab(t)}
-              className={`py-2 text-sm font-semibold rounded-full transition-all ${tab === t ? "bg-card shadow-soft text-foreground" : "text-muted-foreground"}`}
+              className={`py-2 text-sm font-semibold rounded-full transition-all duration-200 ease-out ${tab === t ? "bg-card shadow-soft text-foreground" : "text-muted-foreground"}`}
             >
               {t === "identify" ? "Identify" : "Diagnose"}
             </button>
@@ -91,13 +91,13 @@ const Scan = () => {
             <div className="absolute inset-0" style={{ background: "#111111" }} />
             {/* Subtle vignette glow only behind the reticle */}
             <div
-              className="absolute inset-0 transition-opacity duration-300 ease-out"
+              className="absolute inset-0 transition-opacity duration-200 ease-out duration-300 ease-out"
               style={{
                 background: `radial-gradient(circle at 50% 50%, ${hex}33 0%, transparent 38%)`,
               }}
             />
             {/* Torch glow when on */}
-            {torch && <div className="absolute inset-0 bg-white/5 mix-blend-overlay transition-opacity duration-200 ease-out" />}
+            {torch && <div className="absolute inset-0 bg-white/5 mix-blend-overlay transition-opacity duration-200 ease-out duration-200 ease-out" />}
 
             {/* LIVE badge top-left */}
             <div className="absolute top-3 left-3 inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-success text-success-foreground text-[10px] font-bold tracking-wide shadow-card" style={{ animation: "live-pulse 1.6s ease-in-out infinite" }}>
@@ -107,7 +107,7 @@ const Scan = () => {
             {/* Torch toggle top-right */}
             <button
               onClick={() => setTorch(t => !t)}
-              className="absolute top-3 right-3 h-10 w-10 grid place-items-center rounded-full bg-white/10 text-white backdrop-blur transition-colors duration-200 ease-out hover:bg-white/20"
+              className="absolute top-3 right-3 h-10 w-10 grid place-items-center rounded-full bg-white/10 text-white backdrop-blur transition-colors duration-200 ease-out duration-200 ease-out hover:bg-white/20"
               aria-label="Toggle torch"
             >
               {torch ? <Sun size={16} /> : <Moon size={16} />}
@@ -148,7 +148,7 @@ const Scan = () => {
               <button
                 key={c.id}
                 onClick={() => { setHex(c.hex); setName(c.name); }}
-                className="h-11 w-11 rounded-full border-2 border-card shadow-soft transition-transform hover:scale-110"
+                className="h-11 w-11 rounded-full border-2 border-card shadow-soft transition-transform duration-200 ease-out hover:scale-110"
                 style={{ background: c.hex }}
                 title={c.name}
               />
@@ -156,7 +156,7 @@ const Scan = () => {
           </div>
 
           <button
-            className="w-full inline-flex items-center justify-center gap-2 bg-primary text-primary-foreground font-semibold rounded-xl py-4 shadow-pop transition-all hover:opacity-95 active:scale-[0.98]"
+            className="w-full inline-flex items-center justify-center gap-2 bg-primary text-primary-foreground font-semibold rounded-xl py-4 shadow-pop transition-all duration-200 ease-out hover:opacity-95 active:scale-[0.98]"
             onClick={handleScan}
           >
             <Sparkles size={18} /> Scan this colour

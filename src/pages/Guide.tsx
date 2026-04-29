@@ -63,7 +63,7 @@ const Guide = () => {
         <div className="text-xs font-semibold text-primary mb-2">Step {step + 1} of {total}</div>
         <div className="flex gap-1.5 mb-6">
           {steps.map((_, i) => (
-            <div key={i} className={`h-1.5 flex-1 rounded-full transition-colors ${i <= step ? "bg-primary" : "bg-border"}`} />
+            <div key={i} className={`h-1.5 flex-1 rounded-full transition-colors duration-200 ease-out ${i <= step ? "bg-primary" : "bg-border"}`} />
           ))}
         </div>
 
@@ -97,7 +97,7 @@ const Guide = () => {
         {/* Mix preview */}
         <div className="bg-card rounded-xl p-4 mb-4 flex items-center gap-3" style={{ boxShadow: "0 2px 12px rgba(0,0,0,0.06)" }}>
           <div className="text-xs text-muted-foreground flex-1">See mix preview</div>
-          <div className="h-10 w-10 rounded-full shadow-soft border border-border transition-colors duration-500" style={{ background: previewHex }} />
+          <div className="h-10 w-10 rounded-full shadow-soft border border-border transition-colors duration-200 ease-out duration-500" style={{ background: previewHex }} />
           <div className="font-mono text-xs" style={{ color: textOn(previewHex) === "#FFFFFF" ? "hsl(var(--muted-foreground))" : "hsl(var(--foreground))" }}>{previewHex}</div>
           {step === total - 1 && <span className="text-xs text-success font-semibold">✓</span>}
         </div>
@@ -118,10 +118,10 @@ const Guide = () => {
           <button
             disabled={step === 0}
             onClick={() => setStep(s => Math.max(0, s - 1))}
-            className="inline-flex items-center justify-center gap-1.5 py-3.5 rounded-xl font-semibold text-primary border-2 border-primary transition-colors hover:bg-primary-soft disabled:opacity-40 disabled:cursor-not-allowed"
+            className="inline-flex items-center justify-center gap-1.5 py-3.5 rounded-xl font-semibold text-primary border-2 border-primary transition-colors duration-200 ease-out hover:bg-primary-soft disabled:opacity-40 disabled:cursor-not-allowed"
           ><ChevronLeft size={16} /> Back</button>
           {step < total - 1 ? (
-            <button onClick={markDone} className="inline-flex items-center justify-center gap-1.5 py-3.5 rounded-xl font-semibold bg-primary text-primary-foreground shadow-pop transition-all hover:opacity-95 active:scale-[0.98]">
+            <button onClick={markDone} className="inline-flex items-center justify-center gap-1.5 py-3.5 rounded-xl font-semibold bg-primary text-primary-foreground shadow-pop transition-all duration-200 ease-out hover:opacity-95 active:scale-[0.98]">
               {done.has(step) ? <><Check size={16} /> Next</> : <>Next step <ChevronRight size={16} /></>}
             </button>
           ) : (
