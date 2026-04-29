@@ -1,8 +1,8 @@
 import { useNavigate } from "react-router-dom";
 import { MobileShell } from "@/components/MobileShell";
-import { ArrowLeft, Zap, ZapOff, Sparkles } from "lucide-react";
-import { useEffect, useRef, useState } from "react";
-import { colours, nearestColour } from "@/data/colours";
+import { ArrowLeft, Sun, Moon, Sparkles, ChevronRight } from "lucide-react";
+import { useEffect, useMemo, useRef, useState } from "react";
+import { colours, hexToRgb, nearestColour } from "@/data/colours";
 import { ProportionBar } from "@/components/ProportionBar";
 import { getRecentScans, pushRecentScan, saveMix, getPrefs } from "@/lib/storage";
 import { IngredientList } from "@/components/IngredientList";
@@ -18,16 +18,29 @@ const Scan = () => {
   const [recent, setRecent] = useState(getRecentScans());
   const cycleRef = useRef(0);
 
-  // Simulate live colour detection
+  // Live colour cycling
   useEffect(() => {
     const id = setInterval(() => {
       cycleRef.current = (cycleRef.current + 1) % colours.length;
       const c = colours[cycleRef.current];
       setHex(c.hex);
       setName(c.name);
-    }, 1400);
+    }, 1600);
     return () => clearInterval(id);
   }, []);
+
+  // Nearby suggestions = 4 closest colours by RGB distance excluding current
+  const nearby = useMemo(() => {
+    const t = hexToRgb(hex);
+    return [...colours]
+      .map(c => {
+        const r = hexToRgb(c.hex);
+        return { c, d: (r.r - t.r) ** 2 + (r.g - t.g) ** 2 + (r.b - t.b) ** 2 };
+      })
+      .sort((a, b) => a.d - b.d)
+      .slice(0, 4)
+      .map(x => x.c);
+  }, [hex]);
 
   const handleScan = () => {
     const c = nearestColour(hex);
@@ -48,7 +61,7 @@ const Scan = () => {
 
   return (
     <MobileShell>
-      <header className="flex items-center gap-3 px-5 pt-6 pb-4">
+      <header className="flex items-center gap-3 px-5 pt-6 pb-3">
         <button onClick={() => nav(-1)} className="h-10 w-10 grid place-items-center rounded-full bg-surface"><ArrowLeft size={18} /></button>
         <h1 className="font-display text-2xl font-bold">Scan</h1>
       </header>
@@ -61,48 +74,91 @@ const Scan = () => {
               onClick={() => setTab(t)}
               className={`py-2 text-sm font-semibold rounded-full transition-all ${tab === t ? "bg-card shadow-soft text-foreground" : "text-muted-foreground"}`}
             >
-              {t === "identify" ? "Identify Colour" : "Diagnose Mix"}
+              {t === "identify" ? "Identify" : "Diagnose"}
             </button>
           ))}
         </div>
       </div>
 
       {tab === "identify" && (
-        <div className="px-5 mt-5 space-y-5">
-          {/* Viewfinder */}
-          <div className="relative w-full h-[280px] rounded-3xl overflow-hidden shadow-card">
+        <div className="px-5 mt-4 space-y-4">
+          {/* Viewfinder — ~70% screen height (mobile ≈ 460px) */}
+          <div
+            className="relative w-full rounded-3xl overflow-hidden"
+            style={{ height: "min(70vh, 520px)", boxShadow: "0 2px 12px rgba(0,0,0,0.06)" }}
+          >
+            {/* Realistic warm gradient: layered radial gradients */}
             <div
-              className="absolute inset-0 transition-colors duration-500"
+              className="absolute inset-0 transition-[background] duration-700"
               style={{
-                background: `radial-gradient(circle at 50% 40%, ${hex}, #1a1a1a 80%)`,
+                background: `
+                  radial-gradient(circle at 30% 25%, ${hex}aa, transparent 55%),
+                  radial-gradient(circle at 75% 70%, #2E7D5288, transparent 60%),
+                  radial-gradient(circle at 60% 35%, #F5D76E66, transparent 50%),
+                  radial-gradient(circle at 50% 50%, ${hex}, #1a1a1a 90%)
+                `,
               }}
             />
+            {/* Torch glow when on */}
+            {torch && <div className="absolute inset-0 bg-white/10 mix-blend-overlay" />}
+
+            {/* LIVE badge top-left */}
+            <div className="absolute top-3 left-3 inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-success text-success-foreground text-[10px] font-bold tracking-wide shadow-card" style={{ animation: "live-pulse 1.6s ease-in-out infinite" }}>
+              <span className="h-1.5 w-1.5 rounded-full bg-white" /> LIVE
+            </div>
+
+            {/* Torch toggle top-right */}
             <button
               onClick={() => setTorch(t => !t)}
-              className="absolute top-3 right-3 h-9 w-9 grid place-items-center rounded-full bg-black/40 text-white backdrop-blur"
+              className="absolute top-3 right-3 h-10 w-10 grid place-items-center rounded-full bg-black/40 text-white backdrop-blur transition-colors hover:bg-black/60"
+              aria-label="Toggle torch"
             >
-              {torch ? <Zap size={16} /> : <ZapOff size={16} />}
+              {torch ? <Sun size={16} /> : <Moon size={16} />}
             </button>
-            {/* Reticle */}
+
+            {/* Reticle: dashed outer ring + inner filled circle */}
             <div className="absolute inset-0 grid place-items-center pointer-events-none">
-              <div className="relative">
-                <div className="h-1 w-16 bg-white/60 absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 -rotate-90" />
-                <div className="h-1 w-16 bg-white/60 absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2" />
-                <div className="h-24 w-24 rounded-full border-4 border-white/90 shadow-pop grid place-items-center">
-                  <div className="h-16 w-16 rounded-full transition-colors duration-500 border-2 border-white/80" style={{ background: hex }} />
-                </div>
+              <div className="relative" style={{ width: 180, height: 180 }}>
+                <div
+                  className="absolute inset-0 rounded-full border-2 border-dashed border-white/85"
+                  style={{ animation: "spin-slow 18s linear infinite" }}
+                />
+                <div
+                  className="absolute rounded-full border-2 border-white/90 shadow-pop transition-colors duration-500"
+                  style={{ inset: 36, background: hex }}
+                />
+                {/* Crosshair */}
+                <div className="absolute left-1/2 top-1/2 h-px w-8 -translate-x-1/2 -translate-y-1/2 bg-white/70" />
+                <div className="absolute left-1/2 top-1/2 w-px h-8 -translate-x-1/2 -translate-y-1/2 bg-white/70" />
               </div>
             </div>
-            <div className="absolute bottom-3 left-3 right-3 flex items-center justify-between text-white">
-              <div>
-                <div className="text-xs opacity-80">Detected</div>
-                <div className="font-semibold">{name}</div>
-              </div>
-              <div className="font-mono text-sm bg-black/40 px-2 py-1 rounded">{hex}</div>
+
+            {/* Detected name + hex */}
+            <div className="absolute bottom-4 left-0 right-0 text-center text-white">
+              <div className="font-display text-xl font-bold drop-shadow">{name}</div>
+              <div className="font-mono text-xs text-white/75 mt-0.5">{hex}</div>
             </div>
           </div>
 
-          <button className="btn-primary w-full" onClick={handleScan}><Sparkles size={18} /> Scan this colour</button>
+          {/* Nearby colour suggestions */}
+          <div className="flex items-center justify-center gap-3">
+            {nearby.map(c => (
+              <button
+                key={c.id}
+                onClick={() => { setHex(c.hex); setName(c.name); }}
+                className="h-11 w-11 rounded-full border-2 border-card shadow-soft transition-transform hover:scale-110"
+                style={{ background: c.hex }}
+                title={c.name}
+              />
+            ))}
+          </div>
+
+          <button
+            className="w-full inline-flex items-center justify-center gap-2 bg-primary text-primary-foreground font-semibold rounded-lg py-4 shadow-pop transition-all hover:opacity-95 active:scale-[0.98]"
+            onClick={handleScan}
+          >
+            <Sparkles size={18} /> Scan this colour
+          </button>
 
           {recent.length > 0 && (
             <div>
@@ -116,9 +172,9 @@ const Scan = () => {
           )}
 
           {scanned && (
-            <div className="surface-card p-5 animate-scale-in">
+            <div className="rounded-xl bg-card p-5 animate-scale-in" style={{ boxShadow: "0 2px 12px rgba(0,0,0,0.06)" }}>
               <div className="flex items-center gap-4 mb-4">
-                <div className="h-20 w-20 rounded-2xl shadow-soft" style={{ background: scanned.hex }} />
+                <div className="h-16 w-16 rounded-full shadow-soft" style={{ background: scanned.hex }} />
                 <div className="flex-1">
                   <div className="font-display text-xl font-bold">{scanned.name}</div>
                   <div className="text-xs text-muted-foreground font-mono">{scanned.hex}</div>
@@ -133,7 +189,7 @@ const Scan = () => {
               </div>
               <div className="mt-5 grid grid-cols-2 gap-3">
                 <button onClick={handleSave} className="btn-ghost">Save to library</button>
-                <button onClick={() => nav(`/guide/${scanned.id}`)} className="btn-primary">Mix guide →</button>
+                <button onClick={() => nav(`/guide/${scanned.id}`)} className="btn-primary">Mix guide <ChevronRight size={16} /></button>
               </div>
             </div>
           )}
@@ -142,7 +198,7 @@ const Scan = () => {
 
       {tab === "diagnose" && (
         <div className="px-5 mt-8 text-center">
-          <div className="surface-card p-8">
+          <div className="rounded-xl bg-card p-8" style={{ boxShadow: "0 2px 12px rgba(0,0,0,0.06)" }}>
             <div className="text-5xl mb-3">🧪</div>
             <h3 className="font-display text-xl font-bold mb-2">Diagnose your mix</h3>
             <p className="text-sm text-muted-foreground mb-5">Point your camera at a mix you've made. We'll tell you what's off and how to correct it.</p>

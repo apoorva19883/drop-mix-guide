@@ -3,14 +3,14 @@ import { useEffect, useMemo, useState } from "react";
 import { Logo } from "@/components/Logo";
 import { ColourWheel } from "@/components/ColourWheel";
 import { ProportionBar } from "@/components/ProportionBar";
-import { IngredientList } from "@/components/IngredientList";
 import { hexToRgb, hslToHex, nearestColour } from "@/data/colours";
 import { deleteMix, getMixes, getPrefs, saveMix, setPrefs, SavedMix } from "@/lib/storage";
-import { Bookmark, Camera, Download, Search, Trash2, User } from "lucide-react";
+import { Bookmark, Camera, ChevronRight, Download, Search, Trash2, User } from "lucide-react";
 import { toast } from "sonner";
 import { classifyTemperature, fuzzyFilter, temperatureRank, type Temperature } from "@/lib/search";
 
 const brands = ["Winsor & Newton", "Liquitex", "Golden", "Holbein"];
+const SCALES = [1, 2, 3];
 
 const Studio = () => {
   const nav = useNavigate();
@@ -22,6 +22,7 @@ const Studio = () => {
   const [q, setQ] = useState("");
   const [temp, setTemp] = useState<"All" | Temperature>("All");
   const [sort, setSort] = useState<"Recent" | "Name" | "Warm → Cool" | "Cool → Warm">("Recent");
+  const [scale, setScale] = useState(1);
 
   useEffect(() => { setMixes(getMixes()); }, []);
 
@@ -129,26 +130,65 @@ const Studio = () => {
           </div>
 
           <div className="mt-6">
-            <ProportionBar recipe={matched.recipe} height={64} showLabels />
+            <ProportionBar recipe={matched.recipe} scale={scale} height={64} showLabels />
           </div>
 
-          <div className="grid lg:grid-cols-2 gap-4 mt-8">
-            <IngredientList recipe={matched.recipe} brand={brand} />
-            <div className="space-y-3">
-              <div className="rounded-2xl bg-primary-soft border border-primary/20 p-5">
-                <div className="text-2xl mb-2">💡</div>
-                <div className="font-semibold mb-1">{matched.recipe.total} drops total</div>
-                <p className="text-sm text-muted-foreground">Need a larger batch? Multiply every drop count by 2 or 3 — the proportions stay perfect.</p>
-              </div>
-              <div className="rounded-2xl bg-surface p-5">
-                <div className="text-xs font-semibold text-muted-foreground mb-2">Brand match accuracy</div>
-                <div className="space-y-2">
-                  {matched.brands.map(b => (
-                    <div key={b} className="flex items-center justify-between text-sm">
-                      <span>{b.split(" ").slice(0, -1).join(" ")}</span>
-                      <span className="font-semibold text-success">{b.split(" ").slice(-1)}</span>
+          {/* Scale toggles */}
+          <div className="mt-5 flex gap-2">
+            {SCALES.map(s => (
+              <button
+                key={s}
+                onClick={() => setScale(s)}
+                className={`px-4 py-2 rounded-full text-sm font-semibold transition-all ${scale === s ? "bg-primary text-primary-foreground shadow-pop" : "bg-surface text-foreground hover:bg-border"}`}
+              >
+                {matched.recipe.total * s} drops {s > 1 && <span className="opacity-70 ml-1">({s}×)</span>}
+              </button>
+            ))}
+          </div>
+
+          <div className="grid lg:grid-cols-2 gap-6 mt-8">
+            {/* Ingredient list with brand + drop count */}
+            <div>
+              <div className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-3">Ingredients</div>
+              <div className="bg-card rounded-xl divide-y divide-border border border-border">
+                {matched.recipe.ingredients.map((ing, i) => (
+                  <div key={i} className="flex items-center gap-3 p-3">
+                    <div className="h-6 w-6 rounded shrink-0 border border-border" style={{ background: ing.hex }} />
+                    <div className="flex-1 min-w-0">
+                      <div className="text-sm font-semibold truncate">{ing.paint}</div>
+                      <div className="text-[11px] text-muted-foreground">{brand} · Artist series</div>
                     </div>
-                  ))}
+                    <div className="text-base font-bold text-primary tabular-nums">
+                      {ing.drops * scale}<span className="text-[10px] font-medium text-muted-foreground ml-1">drops</span>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            <div className="space-y-3">
+              <div className="rounded-xl bg-primary-soft border border-primary/20 p-5">
+                <div className="text-2xl mb-2">💡</div>
+                <div className="font-semibold mb-1">Always add darker to lighter colours</div>
+                <p className="text-sm text-muted-foreground">Start with white, then layer in pigments one drop at a time for total control.</p>
+              </div>
+              <div className="rounded-xl bg-card border border-border p-5">
+                <div className="text-xs font-semibold text-muted-foreground mb-3 uppercase tracking-wider">Brand match accuracy</div>
+                <div className="divide-y divide-border">
+                  {matched.brands.map(b => {
+                    const parts = b.split(" ");
+                    const pct = parts[parts.length - 1];
+                    const name = parts.slice(0, -1).join(" ");
+                    return (
+                      <button key={b} className="w-full flex items-center justify-between py-2.5 text-sm hover:bg-surface/60 transition-colors -mx-2 px-2 rounded">
+                        <span className="font-medium">{name}</span>
+                        <span className="flex items-center gap-2">
+                          <span className="font-bold text-success">{pct}</span>
+                          <ChevronRight size={14} className="text-muted-foreground" />
+                        </span>
+                      </button>
+                    );
+                  })}
                 </div>
               </div>
             </div>
