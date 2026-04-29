@@ -118,14 +118,14 @@ const Guide = () => {
           <button
             disabled={step === 0}
             onClick={() => setStep(s => Math.max(0, s - 1))}
-            className="inline-flex items-center justify-center gap-1.5 py-3.5 rounded-lg font-semibold text-primary border-2 border-primary transition-colors hover:bg-primary-soft disabled:opacity-40 disabled:cursor-not-allowed"
+            className="inline-flex items-center justify-center gap-1.5 py-3.5 rounded-xl font-semibold text-primary border-2 border-primary transition-colors hover:bg-primary-soft disabled:opacity-40 disabled:cursor-not-allowed"
           ><ChevronLeft size={16} /> Back</button>
           {step < total - 1 ? (
-            <button onClick={markDone} className="inline-flex items-center justify-center gap-1.5 py-3.5 rounded-lg font-semibold bg-primary text-primary-foreground shadow-pop transition-all hover:opacity-95 active:scale-[0.98]">
+            <button onClick={markDone} className="inline-flex items-center justify-center gap-1.5 py-3.5 rounded-xl font-semibold bg-primary text-primary-foreground shadow-pop transition-all hover:opacity-95 active:scale-[0.98]">
               {done.has(step) ? <><Check size={16} /> Next</> : <>Next step <ChevronRight size={16} /></>}
             </button>
           ) : (
-            <button onClick={() => nav("/library")} className="inline-flex items-center justify-center gap-1.5 py-3.5 rounded-lg font-semibold bg-primary text-primary-foreground shadow-pop"><Check size={16} /> Finish</button>
+            <button onClick={() => nav("/library")} className="inline-flex items-center justify-center gap-1.5 py-3.5 rounded-xl font-semibold bg-primary text-primary-foreground shadow-pop"><Check size={16} /> Finish</button>
           )}
         </div>
       </div>

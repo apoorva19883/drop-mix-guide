@@ -63,7 +63,7 @@ const Library = () => {
           <input
             value={q} onChange={e => setQ(e.target.value)}
             placeholder="Search by name, hex, mood…"
-            className="w-full pl-11 pr-4 py-3 rounded-lg bg-card border border-border text-sm focus:outline-none focus:ring-2 focus:ring-primary/30"
+            className="w-full pl-11 pr-4 py-3 rounded-xl bg-card border border-border text-sm focus:outline-none focus:ring-2 focus:ring-primary/30"
           />
         </div>
 

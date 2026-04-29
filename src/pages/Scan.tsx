@@ -156,7 +156,7 @@ const Scan = () => {
           </div>
 
           <button
-            className="w-full inline-flex items-center justify-center gap-2 bg-primary text-primary-foreground font-semibold rounded-lg py-4 shadow-pop transition-all hover:opacity-95 active:scale-[0.98]"
+            className="w-full inline-flex items-center justify-center gap-2 bg-primary text-primary-foreground font-semibold rounded-xl py-4 shadow-pop transition-all hover:opacity-95 active:scale-[0.98]"
             onClick={handleScan}
           >
             <Sparkles size={18} /> Scan this colour

@@ -61,7 +61,7 @@ const Onboarding = () => {
 
             <div className="w-full space-y-3 mt-8">
               <button
-                className="w-full inline-flex items-center justify-center gap-2 bg-primary text-primary-foreground font-semibold rounded-lg py-4 text-base shadow-pop transition-all hover:opacity-95 active:scale-[0.98]"
+                className="w-full inline-flex items-center justify-center gap-2 bg-primary text-primary-foreground font-semibold rounded-xl py-4 text-base shadow-pop transition-all hover:opacity-95 active:scale-[0.98]"
                 onClick={() => setStep(1)}
               >
                 <Camera size={18} /> Scan a colour
@@ -111,7 +111,7 @@ const Onboarding = () => {
               })}
             </div>
             <button
-              className="w-full inline-flex items-center justify-center gap-2 bg-primary text-primary-foreground font-semibold rounded-lg py-4 mt-8 shadow-pop transition-all hover:opacity-95 active:scale-[0.98]"
+              className="w-full inline-flex items-center justify-center gap-2 bg-primary text-primary-foreground font-semibold rounded-xl py-4 mt-8 shadow-pop transition-all hover:opacity-95 active:scale-[0.98]"
               onClick={() => setStep(2)}
             >
               Continue with {paint} <ArrowRight size={18} />
@@ -138,7 +138,7 @@ const Onboarding = () => {
               </div>
             </div>
             <button
-              className="w-full inline-flex items-center justify-center gap-2 bg-primary text-primary-foreground font-semibold rounded-lg py-4 mt-8 shadow-pop transition-all hover:opacity-95 active:scale-[0.98]"
+              className="w-full inline-flex items-center justify-center gap-2 bg-primary text-primary-foreground font-semibold rounded-xl py-4 mt-8 shadow-pop transition-all hover:opacity-95 active:scale-[0.98]"
               onClick={finish}
             >
               Explore MixRight <ArrowRight size={18} />

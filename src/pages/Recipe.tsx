@@ -70,7 +70,7 @@ const Recipe = () => {
               <button
                 key={s}
                 onClick={() => setScale(s)}
-                className={`py-2.5 rounded-lg font-semibold text-sm transition-all ${scale === s ? "bg-primary text-primary-foreground shadow-pop" : "bg-surface text-foreground hover:bg-border"}`}
+                className={`py-2.5 rounded-xl font-semibold text-sm transition-all ${scale === s ? "bg-primary text-primary-foreground shadow-pop" : "bg-surface text-foreground hover:bg-border"}`}
               >
                 {data.recipe.total * s} drops
               </button>
@@ -114,11 +114,11 @@ const Recipe = () => {
 
         {/* CTAs */}
         <div className="space-y-3 no-print">
-          <button onClick={handleSave} className="w-full inline-flex items-center justify-center gap-2 bg-primary text-primary-foreground font-semibold rounded-lg py-4 shadow-pop transition-all hover:opacity-95 active:scale-[0.98]">
+          <button onClick={handleSave} className="w-full inline-flex items-center justify-center gap-2 bg-primary text-primary-foreground font-semibold rounded-xl py-4 shadow-pop transition-all hover:opacity-95 active:scale-[0.98]">
             <Bookmark size={16} /> Save to my mixes
           </button>
           {data.colourId && (
-            <button onClick={() => nav(`/guide/${data.colourId}`)} className="w-full inline-flex items-center justify-center gap-2 rounded-lg py-4 font-semibold text-primary border-2 border-primary transition-colors hover:bg-primary-soft">
+            <button onClick={() => nav(`/guide/${data.colourId}`)} className="w-full inline-flex items-center justify-center gap-2 rounded-xl py-4 font-semibold text-primary border-2 border-primary transition-colors hover:bg-primary-soft">
               Step by step guide <ChevronRightCircle size={16} />
             </button>
           )}

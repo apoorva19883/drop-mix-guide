@@ -130,7 +130,7 @@ const ColourDetail = () => {
           <ProportionBar recipe={colour.recipe} />
         </div>
 
-        <button onClick={() => nav(`/recipe/${colour.id}`)} className="w-full inline-flex items-center justify-center gap-2 bg-primary text-primary-foreground font-semibold rounded-lg py-4 shadow-pop transition-all hover:opacity-95 active:scale-[0.98]">
+        <button onClick={() => nav(`/recipe/${colour.id}`)} className="w-full inline-flex items-center justify-center gap-2 bg-primary text-primary-foreground font-semibold rounded-xl py-4 shadow-pop transition-all hover:opacity-95 active:scale-[0.98]">
           View full recipe →
         </button>
       </div>
