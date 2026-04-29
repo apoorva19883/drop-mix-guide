@@ -114,7 +114,7 @@ const Studio = () => {
         </aside>
 
         {/* CENTER */}
-        <main className="surface-card p-8">
+        <main className="bg-card border border-border rounded-xl p-8" style={{ boxShadow: "0 2px 12px rgba(0,0,0,0.06)" }}>
           <div className="text-xs font-semibold text-muted-foreground mb-2 uppercase tracking-wider">Drop Recipe</div>
           <div className="flex items-end justify-between gap-4 mb-1 flex-wrap">
             <div className="flex items-center gap-4">
@@ -201,7 +201,7 @@ const Studio = () => {
         </main>
 
         {/* RIGHT */}
-        <aside className="surface-card p-5 space-y-4 h-fit lg:sticky lg:top-24">
+        <aside className="bg-surface border border-border rounded-xl p-5 space-y-4 h-fit lg:sticky lg:top-24">
           <div className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">My Library</div>
           <div className="relative">
             <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground" />
