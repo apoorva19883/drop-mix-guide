@@ -28,18 +28,19 @@ export const ProportionBar = ({ recipe, scale = 1, height = 52, showLabels = fal
           return (
             <div
               key={i}
-              className="flex flex-col items-center justify-center transition-all duration-700 ease-out overflow-hidden relative"
+              className="flex flex-col items-center justify-center transition-all duration-300 ease-out overflow-hidden relative"
               style={{
                 width: mounted ? `${pct}%` : "0%",
                 background: ing.hex,
-                color: fg,
+                color: "#FFFFFF",
+                borderLeft: i === 0 ? undefined : "2px solid #FFFFFF",
               }}
               title={`${ing.paint} · ${dropCount} drops`}
             >
               {pct >= 10 && (
-                <div className="flex items-center gap-1 px-1">
-                  <DropIcon size={Math.min(14, height / 4)} color={fg} />
-                  <span className="text-xs font-bold tabular-nums">{dropCount}</span>
+                <div className="flex items-center gap-1 px-1" style={{ textShadow: "0 1px 2px rgba(0,0,0,0.35)" }}>
+                  <DropIcon size={Math.min(14, height / 4)} color="#FFFFFF" />
+                  <span className="text-xs font-bold tabular-nums text-white">{dropCount}</span>
                 </div>
               )}
             </div>
